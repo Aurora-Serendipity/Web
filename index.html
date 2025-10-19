@@ -162,21 +162,24 @@
         <div class="grid grid-cols-3 gap-3">
           <button
             type="button"
-            class="flex justify-center items-center py-2 border border-gray-300 rounded-lg text-dark hover:bg-gray-50 transition-colors"
+            class="flex justify-center items-center h-12 border border-gray-300 rounded-lg text-dark hover:bg-green-50 hover:border-green-300 transition-all duration-300 btn-hover"
+            title="微信登录"
           >
-            <i class="fa fa-weixin text-green-500"></i>
+            <i class="fa fa-weixin text-xl text-green-500"></i>
           </button>
           <button
             type="button"
-            class="flex justify-center items-center py-2 border border-gray-300 rounded-lg text-dark hover:bg-gray-50 transition-colors"
+            class="flex justify-center items-center h-12 border border-gray-300 rounded-lg text-dark hover:bg-blue-50 hover:border-blue-300 transition-all duration-300 btn-hover"
+            title="QQ登录"
           >
-            <i class="fa fa-qq text-blue-400"></i>
+            <i class="fa fa-qq text-xl text-blue-400"></i>
           </button>
           <button
             type="button"
-            class="flex justify-center items-center py-2 border border-gray-300 rounded-lg text-dark hover:bg-gray-50 transition-colors"
+            class="flex justify-center items-center h-12 border border-gray-300 rounded-lg text-dark hover:bg-gray-100 hover:border-gray-400 transition-all duration-300 btn-hover"
+            title="GitHub登录"
           >
-            <i class="fa fa-github text-gray-700"></i>
+            <i class="fa fa-github text-xl text-gray-700"></i>
           </button>
         </div>
 
@@ -201,11 +204,22 @@
       <span>登录成功!</span>
     </div>
 
-    <!-- 跳转按钮 -->
-    <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-10">
-      <a href="blog.html" 
-         class="bg-accent hover:bg-accent/90 text-white font-medium py-3 px-6 rounded-lg btn-hover focus:ring-2 focus:ring-accent/50 focus:outline-none flex items-center">
+    <!-- 跳转按钮区域 -->
+    <div class="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-10 flex flex-col sm:flex-row gap-4 items-center">
+      <!-- 前往网站主页按钮 -->
+      <a
+        href="blog.html"
+        class="bg-accent hover:bg-accent/90 text-white font-medium py-3 px-6 rounded-lg btn-hover focus:ring-2 focus:ring-accent/50 focus:outline-none flex items-center"
+      >
         <i class="fa fa-home mr-2"></i>前往网站主页
+      </a>
+      
+      <!-- 前往AI聊天页面按钮 -->
+      <a
+        href="AIchat.html"
+        class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg btn-hover focus:ring-2 focus:ring-primary/50 focus:outline-none flex items-center"
+      >
+        <i class="fa fa-comments mr-2"></i>前往AI聊天页面
       </a>
     </div>
 
@@ -252,12 +266,36 @@
 
           // 这里可以添加实际的登录逻辑，如AJAX请求等
           console.log("登录信息:", { username, password });
-          
+
           // 登录成功后跳转到博客页面
           setTimeout(() => {
             window.location.href = "blog.html";
           }, 1500);
         }
+      });
+
+      // 社交登录按钮事件处理
+      const socialButtons = document.querySelectorAll('.grid.cols-3 button');
+      socialButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // 获取按钮标题作为登录方式
+          const loginType = this.title || '社交账号';
+          
+          // 显示成功提示
+          const successToast = document.getElementById('successToast');
+          successToast.querySelector('span').textContent = `${loginType}登录中...`;
+          successToast.classList.remove('translate-y-20', 'opacity-0');
+          
+          // 模拟社交登录过程（实际项目中这里应该调用对应的OAuth API）
+          setTimeout(() => {
+            successToast.querySelector('span').textContent = `${loginType}登录成功!`;
+            
+            // 登录成功后跳转到博客页面
+            setTimeout(() => {
+              window.location.href = 'blog.html';
+            }, 1500);
+          }, 1000);
+        });
       });
 
       // 添加输入框动画效果
