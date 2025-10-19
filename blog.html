@@ -1,584 +1,929 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>个人博客 - 首页</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3b82f6',
-            secondary: '#6b7280',
-            accent: '#10b981',
-            dark: '#1f2937',
-            light: '#f9fafb'
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>个人博客 - 首页</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3b82f6",
+              secondary: "#6b7280",
+              accent: "#10b981",
+              dark: "#1f2937",
+              light: "#f9fafb",
+            },
+            fontFamily: {
+              inter: ["Inter", "system-ui", "sans-serif"],
+            },
           },
-          fontFamily: {
-            inter: ['Inter', 'system-ui', 'sans-serif']
-          }
+        },
+      };
+    </script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+        .shadow-soft {
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .card-hover {
+          @apply hover:shadow-md hover:-translate-y-1 transition-all duration-300;
+        }
+        .nav-link {
+          @apply px-3 py-2 text-secondary hover:text-primary transition-colors duration-200;
+        }
+        .nav-link-active {
+          @apply text-primary font-medium;
         }
       }
-    }
-  </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-      .shadow-soft {
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-      }
-      .card-hover {
-        @apply hover:shadow-md hover:-translate-y-1 transition-all duration-300;
-      }
-      .nav-link {
-        @apply px-3 py-2 text-secondary hover:text-primary transition-colors duration-200;
-      }
-      .nav-link-active {
-        @apply text-primary font-medium;
-      }
-    }
-  </style>
-</head>
-<body class="font-inter bg-gray-50 text-dark min-h-screen flex flex-col">
-  <!-- 导航栏 -->
-  <header class="bg-white shadow-sm sticky top-0 z-50">
-    <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <i class="fa fa-book text-primary text-2xl"></i>
-        <a href="blog.html" class="text-xl font-bold text-dark">我的博客</a>
-      </div>
-      
-      <!-- 桌面端导航 -->
-      <div class="hidden md:flex items-center space-x-1">
-        <a href="blog.html" class="nav-link nav-link-active">首页</a>
-        <a href="#articles" class="nav-link">文章</a>
-        <a href="#categories" class="nav-link">分类</a>
-        <a href="#tags" class="nav-link">标签</a>
-        <a href="#about" class="nav-link">关于</a>
-      </div>
-      
-      <!-- 搜索和用户区域 -->
-      <div class="flex items-center space-x-4">
-        <div class="relative hidden md:block">
-          <input type="text" placeholder="搜索文章..." 
-                 class="pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary w-48">
-          <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary"></i>
+    </style>
+  </head>
+  <body class="font-inter bg-gray-50 text-dark min-h-screen flex flex-col">
+    <!-- 导航栏 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <nav
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <div class="flex items-center space-x-2">
+          <i class="fa fa-book text-primary text-2xl"></i>
+          <a href="blog.html" class="text-xl font-bold text-dark">我的博客</a>
         </div>
-        
-        <a href="test.html" class="bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-lg transition-colors duration-200">
-          <i class="fa fa-user-circle mr-1"></i>登录
-        </a>
-        
-        <!-- 移动端菜单按钮 -->
-        <button id="mobileMenuBtn" class="md:hidden text-dark p-2">
-          <i class="fa fa-bars text-xl"></i>
-        </button>
-      </div>
-    </nav>
-    
-    <!-- 移动端导航菜单 -->
-    <div id="mobileMenu" class="md:hidden hidden bg-white border-t border-gray-100">
-      <div class="container mx-auto px-4 py-3 space-y-2">
-        <a href="blog.html" class="block py-2 text-primary font-medium">首页</a>
-        <a href="#articles" class="block py-2 text-secondary hover:text-primary">文章</a>
-        <a href="#categories" class="block py-2 text-secondary hover:text-primary">分类</a>
-        <a href="#tags" class="block py-2 text-secondary hover:text-primary">标签</a>
-        <a href="#about" class="block py-2 text-secondary hover:text-primary">关于</a>
-        <div class="relative mt-3">
-          <input type="text" placeholder="搜索文章..." 
-                 class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-          <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary"></i>
-        </div>
-      </div>
-    </div>
-  </header>
 
-  <!-- 主要内容区域 -->
-  <main class="flex-grow container mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-      <!-- 左侧边栏 - 作者信息 -->
-      <aside class="lg:col-span-1">
-        <div class="sticky top-24 space-y-6">
-          <!-- 作者卡片 -->
-          <div class="bg-white rounded-xl shadow-soft overflow-hidden card-hover">
-            <div class="bg-primary h-24"></div>
-            <div class="-mt-12 px-6">
-              <img src="https://picsum.photos/id/64/120/120" alt="作者头像" 
-                   class="w-24 h-24 rounded-full border-4 border-white shadow-md">
-            </div>
-            <div class="p-6 text-center">
-              <h2 class="text-xl font-bold text-dark">博主昵称</h2>
-              <p class="text-secondary mt-1">热爱技术与分享的开发者</p>
-              <div class="flex justify-center space-x-3 mt-4">
-                <a href="#" class="text-secondary hover:text-primary transition-colors" title="GitHub">
-                  <i class="fa fa-github text-xl"></i>
-                </a>
-                <a href="#" class="text-secondary hover:text-primary transition-colors" title="Twitter">
-                  <i class="fa fa-twitter text-xl"></i>
-                </a>
-                <a href="#" class="text-secondary hover:text-primary transition-colors" title="知乎">
-                  <i class="fa fa-question-circle text-xl"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-          
-          <!-- 分类列表 -->
-          <div id="categories" class="bg-white rounded-xl shadow-soft p-6 card-hover">
-            <h3 class="text-lg font-bold text-dark mb-4">文章分类</h3>
-            <ul class="space-y-3">
-              <li class="flex justify-between items-center">
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-folder-o mr-2"></i>前端开发
-                </a>
-                <span class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full">28</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-folder-o mr-2"></i>后端开发
-                </a>
-                <span class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full">16</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-folder-o mr-2"></i>算法与数据结构
-                </a>
-                <span class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full">12</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-folder-o mr-2"></i>开发工具
-                </a>
-                <span class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full">9</span>
-              </li>
-              <li class="flex justify-between items-center">
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-folder-o mr-2"></i>学习笔记
-                </a>
-                <span class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full">23</span>
-              </li>
-            </ul>
-            <a href="#" class="text-primary text-sm hover:underline flex items-center justify-center mt-4">
-              查看全部 <i class="fa fa-angle-right ml-1"></i>
-            </a>
-          </div>
-          
-          <!-- 标签云 -->
-          <div id="tags" class="bg-white rounded-xl shadow-soft p-6 card-hover">
-            <h3 class="text-lg font-bold text-dark mb-4">热门标签</h3>
-            <div class="flex flex-wrap gap-2">
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">JavaScript</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">Python</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">React</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">Vue</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">TypeScript</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">Node.js</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">Git</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">Docker</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">CSS3</a>
-              <a href="#" class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors">HTML5</a>
-            </div>
-          </div>
+        <!-- 桌面端导航 -->
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="blog.html" class="nav-link nav-link-active">首页</a>
+          <a href="#articles" class="nav-link">文章</a>
+          <a href="#categories" class="nav-link">分类</a>
+          <a href="#tags" class="nav-link">标签</a>
+          <a href="#about" class="nav-link">关于</a>
         </div>
-      </aside>
-      
-      <!-- 中间内容区 - 文章列表 -->
-      <div id="articles" class="lg:col-span-3 space-y-6">
-        <!-- 顶部横幅 -->
-        <div class="relative rounded-xl overflow-hidden h-64 shadow-soft">
-          <img src="https://picsum.photos/id/160/1200/400" alt="博客横幅" class="w-full h-full object-cover">
-          <div class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent flex flex-col justify-end p-6">
-            <h1 class="text-white text-2xl md:text-3xl font-bold">探索技术的无限可能</h1>
-            <p class="text-white/90 mt-2">记录技术成长，分享开发经验，探索编程世界的精彩</p>
+
+        <!-- 搜索和用户区域 -->
+        <div class="flex items-center space-x-4">
+          <div class="relative hidden md:block">
+            <input
+              type="text"
+              placeholder="搜索文章..."
+              class="pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary w-48"
+            />
+            <i
+              class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary"
+            ></i>
           </div>
+
+          <a
+            href="test.html"
+            class="bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-lg transition-colors duration-200"
+          >
+            <i class="fa fa-user-circle mr-1"></i>登录
+          </a>
+
+          <!-- 移动端菜单按钮 -->
+          <button id="mobileMenuBtn" class="md:hidden text-dark p-2">
+            <i class="fa fa-bars text-xl"></i>
+          </button>
         </div>
-        
-        <!-- 文章筛选 -->
-        <div class="bg-white rounded-xl shadow-soft p-4 flex flex-wrap justify-between items-center">
-          <div class="flex space-x-2 mb-2 md:mb-0">
-            <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm">最新文章</button>
-            <button class="px-4 py-2 bg-gray-100 text-secondary hover:bg-gray-200 rounded-lg text-sm transition-colors">热门文章</button>
-            <button class="px-4 py-2 bg-gray-100 text-secondary hover:bg-gray-200 rounded-lg text-sm transition-colors">推荐文章</button>
-          </div>
-          <div class="relative">
-            <select class="appearance-none pl-4 pr-10 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
-              <option>按时间排序</option>
-              <option>按热度排序</option>
-              <option>按评论数排序</option>
-            </select>
-            <i class="fa fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary pointer-events-none"></i>
-          </div>
-        </div>
-        
-        <!-- 文章列表 -->
-        <div class="space-y-6">
-          <!-- 文章1 -->
-          <article class="bg-white rounded-xl shadow-soft overflow-hidden card-hover">
-            <div class="md:flex">
-              <div class="md:w-1/3">
-                <img src="https://picsum.photos/id/237/600/400" alt="文章缩略图" class="w-full h-48 md:h-full object-cover">
-              </div>
-              <div class="p-6 md:w-2/3">
-                <div class="flex items-center text-sm text-secondary mb-2">
-                  <span class="mr-4"><i class="fa fa-folder-o mr-1"></i>前端开发</span>
-                  <span><i class="fa fa-calendar-o mr-1"></i>2024-01-15</span>
-                </div>
-                <h2 class="text-xl font-bold text-dark hover:text-primary transition-colors">
-                  <a href="#">深入理解JavaScript异步编程：从回调到Async/Await</a>
-                </h2>
-                <p class="text-secondary mt-3 line-clamp-3">JavaScript异步编程是前端开发中的重要概念，本文将从基础的回调函数开始，逐步介绍Promise、Generator以及Async/Await语法，帮助你全面掌握JavaScript异步编程的各种模式和最佳实践。</p>
-                <div class="flex justify-between items-center mt-4">
-                  <div class="flex items-center">
-                    <img src="https://picsum.photos/id/64/40/40" alt="作者头像" class="w-8 h-8 rounded-full mr-2">
-                    <span class="text-sm font-medium">博主昵称</span>
-                  </div>
-                  <div class="flex items-center space-x-4 text-secondary">
-                    <span class="text-sm"><i class="fa fa-eye mr-1"></i>1.2k</span>
-                    <span class="text-sm"><i class="fa fa-comment-o mr-1"></i>45</span>
-                    <span class="text-sm"><i class="fa fa-heart-o mr-1"></i>128</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-          
-          <!-- 文章2 -->
-          <article class="bg-white rounded-xl shadow-soft overflow-hidden card-hover">
-            <div class="md:flex">
-              <div class="md:w-1/3">
-                <img src="https://picsum.photos/id/180/600/400" alt="文章缩略图" class="w-full h-48 md:h-full object-cover">
-              </div>
-              <div class="p-6 md:w-2/3">
-                <div class="flex items-center text-sm text-secondary mb-2">
-                  <span class="mr-4"><i class="fa fa-folder-o mr-1"></i>开发工具</span>
-                  <span><i class="fa fa-calendar-o mr-1"></i>2024-01-10</span>
-                </div>
-                <h2 class="text-xl font-bold text-dark hover:text-primary transition-colors">
-                  <a href="#">Git高级技巧：提升你的版本控制效率</a>
-                </h2>
-                <p class="text-secondary mt-3 line-clamp-3">Git作为最流行的版本控制系统，掌握其高级技巧能显著提升开发效率。本文将介绍Git分支管理策略、交互式rebase、stash操作、子模块使用等高级特性，帮助你成为Git高手。</p>
-                <div class="flex justify-between items-center mt-4">
-                  <div class="flex items-center">
-                    <img src="https://picsum.photos/id/64/40/40" alt="作者头像" class="w-8 h-8 rounded-full mr-2">
-                    <span class="text-sm font-medium">博主昵称</span>
-                  </div>
-                  <div class="flex items-center space-x-4 text-secondary">
-                    <span class="text-sm"><i class="fa fa-eye mr-1"></i>986</span>
-                    <span class="text-sm"><i class="fa fa-comment-o mr-1"></i>32</span>
-                    <span class="text-sm"><i class="fa fa-heart-o mr-1"></i>95</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-          
-          <!-- 文章3 -->
-          <article class="bg-white rounded-xl shadow-soft overflow-hidden card-hover">
-            <div class="md:flex">
-              <div class="md:w-1/3">
-                <img src="https://picsum.photos/id/160/600/400" alt="文章缩略图" class="w-full h-48 md:h-full object-cover">
-              </div>
-              <div class="p-6 md:w-2/3">
-                <div class="flex items-center text-sm text-secondary mb-2">
-                  <span class="mr-4"><i class="fa fa-folder-o mr-1"></i>后端开发</span>
-                  <span><i class="fa fa-calendar-o mr-1"></i>2024-01-05</span>
-                </div>
-                <h2 class="text-xl font-bold text-dark hover:text-primary transition-colors">
-                  <a href="#">Node.js性能优化实战：从理论到实践</a>
-                </h2>
-                <p class="text-secondary mt-3 line-clamp-3">Node.js凭借其非阻塞I/O模型在服务端开发中广受欢迎，但要充分发挥其性能优势需要掌握一定的优化技巧。本文将从内存管理、事件循环、异步操作优化等方面，介绍Node.js性能调优的实用策略。</p>
-                <div class="flex justify-between items-center mt-4">
-                  <div class="flex items-center">
-                    <img src="https://picsum.photos/id/64/40/40" alt="作者头像" class="w-8 h-8 rounded-full mr-2">
-                    <span class="text-sm font-medium">博主昵称</span>
-                  </div>
-                  <div class="flex items-center space-x-4 text-secondary">
-                    <span class="text-sm"><i class="fa fa-eye mr-1"></i>1.5k</span>
-                    <span class="text-sm"><i class="fa fa-comment-o mr-1"></i>56</span>
-                    <span class="text-sm"><i class="fa fa-heart-o mr-1"></i>178</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </article>
-        </div>
-        
-        <!-- 分页 -->
-        <div class="flex justify-center mt-8">
-          <nav class="inline-flex rounded-md shadow-sm" aria-label="分页">
-            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50">
-              <i class="fa fa-angle-left"></i>
-            </a>
-            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-primary text-sm font-medium text-white">1</a>
-            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50">2</a>
-            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50">3</a>
-            <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary">...</span>
-            <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50">10</a>
-            <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50">
-              <i class="fa fa-angle-right"></i>
-            </a>
-          </nav>
-        </div>
-        
-        <!-- 关于博主 -->
-        <section id="about" class="bg-white rounded-xl shadow-soft p-6 card-hover">
-          <h3 class="text-xl font-bold text-dark mb-4">关于博主</h3>
-          <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0">
-            <img src="https://picsum.photos/id/64/120/120" alt="博主照片" class="w-24 h-24 rounded-full border-2 border-gray-100">
-            <div class="md:ml-6 flex-grow">
-              <p class="text-secondary">你好，我是一名热爱技术的开发者，专注于前端和全栈开发。这个博客是我记录学习心得、分享技术经验的地方。我相信知识的分享能够让技术社区更加繁荣，也希望通过这个平台认识更多志同道合的朋友。</p>
-              <div class="flex justify-center md:justify-start space-x-4 mt-4">
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-github text-xl"></i>
-                </a>
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-twitter text-xl"></i>
-                </a>
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-linkedin text-xl"></i>
-                </a>
-                <a href="#" class="text-secondary hover:text-primary transition-colors">
-                  <i class="fa fa-envelope text-xl"></i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-        
-        <!-- 扩展接口占位区域 -->
-        <div class="bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl p-6 border border-dashed border-primary/30">
-          <h3 class="text-lg font-semibold text-dark flex items-center">
-            <i class="fa fa-puzzle-piece text-primary mr-2"></i>
-            博客扩展接口区域
-          </h3>
-          <p class="text-secondary mt-2">此区域预留用于未来功能扩展，如评论系统、推荐文章、相关阅读等模块。</p>
-          
-          <!-- 评论系统接口 -->
-          <div class="mt-4 bg-white/80 p-4 rounded-lg border border-gray-100">
-            <h4 class="font-medium text-dark flex items-center text-sm">
-              <i class="fa fa-comment text-primary mr-2"></i>
-              评论系统接口
-            </h4>
-            <p class="text-xs text-secondary mt-1">可在此处集成Disqus、Gitalk、Valine等第三方评论系统或自定义评论功能</p>
-          </div>
-          
-          <!-- 推荐系统接口 -->
-          <div class="mt-3 bg-white/80 p-4 rounded-lg border border-gray-100">
-            <h4 class="font-medium text-dark flex items-center text-sm">
-              <i class="fa fa-thumbs-up text-primary mr-2"></i>
-              推荐系统接口
-            </h4>
-            <p class="text-xs text-secondary mt-1">可集成基于用户兴趣的智能推荐算法，展示个性化内容</p>
-          </div>
-          
-          <!-- 统计分析接口 -->
-          <div class="mt-3 bg-white/80 p-4 rounded-lg border border-gray-100">
-            <h4 class="font-medium text-dark flex items-center text-sm">
-              <i class="fa fa-bar-chart text-primary mr-2"></i>
-              统计分析接口
-            </h4>
-            <p class="text-xs text-secondary mt-1">可集成网站访问统计、文章阅读量分析等功能模块</p>
+      </nav>
+
+      <!-- 移动端导航菜单 -->
+      <div
+        id="mobileMenu"
+        class="md:hidden hidden bg-white border-t border-gray-100"
+      >
+        <div class="container mx-auto px-4 py-3 space-y-2">
+          <a href="blog.html" class="block py-2 text-primary font-medium"
+            >首页</a
+          >
+          <a
+            href="#articles"
+            class="block py-2 text-secondary hover:text-primary"
+            >文章</a
+          >
+          <a
+            href="#categories"
+            class="block py-2 text-secondary hover:text-primary"
+            >分类</a
+          >
+          <a href="#tags" class="block py-2 text-secondary hover:text-primary"
+            >标签</a
+          >
+          <a href="#about" class="block py-2 text-secondary hover:text-primary"
+            >关于</a
+          >
+          <div class="relative mt-3">
+            <input
+              type="text"
+              placeholder="搜索文章..."
+              class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+            />
+            <i
+              class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-secondary"
+            ></i>
           </div>
         </div>
       </div>
-    </div>
-  </main>
+    </header>
 
-  <!-- 页脚 -->
-  <footer class="bg-dark text-white py-12 mt-12">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- 博客信息 -->
-        <div>
-          <div class="flex items-center space-x-2 mb-4">
-            <i class="fa fa-book text-primary text-2xl"></i>
-            <h3 class="text-xl font-bold">我的博客</h3>
+    <!-- 主要内容区域 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- 左侧边栏 - 作者信息 -->
+        <aside class="lg:col-span-1">
+          <div class="sticky top-24 space-y-6">
+            <!-- 作者卡片 -->
+            <div
+              class="bg-white rounded-xl shadow-soft overflow-hidden card-hover"
+            >
+              <div class="bg-primary h-24"></div>
+              <div class="-mt-12 px-6">
+                <img
+                  src="https://picsum.photos/id/64/120/120"
+                  alt="作者头像"
+                  class="w-24 h-24 rounded-full border-4 border-white shadow-md"
+                />
+              </div>
+              <div class="p-6 text-center">
+                <h2 class="text-xl font-bold text-dark">博主昵称</h2>
+                <p class="text-secondary mt-1">热爱技术与分享的开发者</p>
+                <div class="flex justify-center space-x-3 mt-4">
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                    title="GitHub"
+                  >
+                    <i class="fa fa-github text-xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                    title="Twitter"
+                  >
+                    <i class="fa fa-twitter text-xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                    title="知乎"
+                  >
+                    <i class="fa fa-question-circle text-xl"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- 分类列表 -->
+            <div
+              id="categories"
+              class="bg-white rounded-xl shadow-soft p-6 card-hover"
+            >
+              <h3 class="text-lg font-bold text-dark mb-4">文章分类</h3>
+              <ul class="space-y-3">
+                <li class="flex justify-between items-center">
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-folder-o mr-2"></i>前端开发
+                  </a>
+                  <span
+                    class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full"
+                    >28</span
+                  >
+                </li>
+                <li class="flex justify-between items-center">
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-folder-o mr-2"></i>后端开发
+                  </a>
+                  <span
+                    class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full"
+                    >16</span
+                  >
+                </li>
+                <li class="flex justify-between items-center">
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-folder-o mr-2"></i>算法与数据结构
+                  </a>
+                  <span
+                    class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full"
+                    >12</span
+                  >
+                </li>
+                <li class="flex justify-between items-center">
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-folder-o mr-2"></i>开发工具
+                  </a>
+                  <span
+                    class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full"
+                    >9</span
+                  >
+                </li>
+                <li class="flex justify-between items-center">
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-folder-o mr-2"></i>学习笔记
+                  </a>
+                  <span
+                    class="bg-gray-100 text-secondary text-xs px-2 py-1 rounded-full"
+                    >23</span
+                  >
+                </li>
+              </ul>
+              <a
+                href="#"
+                class="text-primary text-sm hover:underline flex items-center justify-center mt-4"
+              >
+                查看全部 <i class="fa fa-angle-right ml-1"></i>
+              </a>
+            </div>
+
+            <!-- 标签云 -->
+            <div
+              id="tags"
+              class="bg-white rounded-xl shadow-soft p-6 card-hover"
+            >
+              <h3 class="text-lg font-bold text-dark mb-4">热门标签</h3>
+              <div class="flex flex-wrap gap-2">
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >JavaScript</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >Python</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >React</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >Vue</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >TypeScript</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >Node.js</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >Git</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >Docker</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >CSS3</a
+                >
+                <a
+                  href="#"
+                  class="bg-gray-100 hover:bg-primary hover:text-white text-secondary px-3 py-1 rounded-full text-sm transition-colors"
+                  >HTML5</a
+                >
+              </div>
+            </div>
           </div>
-          <p class="text-gray-400 mb-4">记录技术成长，分享开发经验，探索编程世界的精彩。</p>
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-              <i class="fa fa-github text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-              <i class="fa fa-twitter text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-              <i class="fa fa-linkedin text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-primary transition-colors">
-              <i class="fa fa-weibo text-xl"></i>
-            </a>
+        </aside>
+
+        <!-- 中间内容区 - 文章列表 -->
+        <div id="articles" class="lg:col-span-3 space-y-6">
+          <!-- 顶部横幅 -->
+          <div class="relative rounded-xl overflow-hidden h-64 shadow-soft">
+            <img
+              src="https://picsum.photos/id/160/1200/400"
+              alt="博客横幅"
+              class="w-full h-full object-cover"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-dark/80 to-transparent flex flex-col justify-end p-6"
+            >
+              <h1 class="text-white text-2xl md:text-3xl font-bold">
+                探索技术的无限可能
+              </h1>
+              <p class="text-white/90 mt-2">
+                记录技术成长，分享开发经验，探索编程世界的精彩
+              </p>
+            </div>
           </div>
-        </div>
-        
-        <!-- 快速链接 -->
-        <div>
-          <h3 class="text-lg font-bold mb-4">快速链接</h3>
-          <ul class="space-y-2">
-            <li><a href="blog.html" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
-            <li><a href="#articles" class="text-gray-400 hover:text-white transition-colors">文章列表</a></li>
-            <li><a href="#categories" class="text-gray-400 hover:text-white transition-colors">文章分类</a></li>
-            <li><a href="#tags" class="text-gray-400 hover:text-white transition-colors">标签云</a></li>
-            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于博主</a></li>
-          </ul>
-        </div>
-        
-        <!-- 联系信息 -->
-        <div>
-          <h3 class="text-lg font-bold mb-4">联系我</h3>
-          <ul class="space-y-2">
-            <li class="flex items-start">
-              <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
-              <span class="text-gray-400">contact@example.com</span>
-            </li>
-            <li class="flex items-start">
-              <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
-              <span class="text-gray-400">北京市海淀区</span>
-            </li>
-          </ul>
-          <div class="mt-6">
-            <h4 class="text-sm font-semibold text-gray-300 mb-2">订阅博客更新</h4>
-            <div class="flex">
-              <input type="email" placeholder="输入您的邮箱" 
-                     class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary flex-grow">
-              <button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-lg transition-colors">
-                订阅
+
+          <!-- 文章筛选 -->
+          <div
+            class="bg-white rounded-xl shadow-soft p-4 flex flex-wrap justify-between items-center"
+          >
+            <div class="flex space-x-2 mb-2 md:mb-0">
+              <button
+                class="px-4 py-2 bg-primary text-white rounded-lg text-sm"
+              >
+                最新文章
+              </button>
+              <button
+                class="px-4 py-2 bg-gray-100 text-secondary hover:bg-gray-200 rounded-lg text-sm transition-colors"
+              >
+                热门文章
+              </button>
+              <button
+                class="px-4 py-2 bg-gray-100 text-secondary hover:bg-gray-200 rounded-lg text-sm transition-colors"
+              >
+                推荐文章
               </button>
             </div>
+            <div class="relative">
+              <select
+                class="appearance-none pl-4 pr-10 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary"
+              >
+                <option>按时间排序</option>
+                <option>按热度排序</option>
+                <option>按评论数排序</option>
+              </select>
+              <i
+                class="fa fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary pointer-events-none"
+              ></i>
+            </div>
+          </div>
+
+          <!-- 文章列表 -->
+          <div class="space-y-6">
+            <!-- 文章1 -->
+            <article
+              class="bg-white rounded-xl shadow-soft overflow-hidden card-hover"
+            >
+              <div class="md:flex">
+                <div class="md:w-1/3">
+                  <img
+                    src="https://picsum.photos/id/237/600/400"
+                    alt="文章缩略图"
+                    class="w-full h-48 md:h-full object-cover"
+                  />
+                </div>
+                <div class="p-6 md:w-2/3">
+                  <div class="flex items-center text-sm text-secondary mb-2">
+                    <span class="mr-4"
+                      ><i class="fa fa-folder-o mr-1"></i>前端开发</span
+                    >
+                    <span><i class="fa fa-calendar-o mr-1"></i>2024-01-15</span>
+                  </div>
+                  <h2
+                    class="text-xl font-bold text-dark hover:text-primary transition-colors"
+                  >
+                    <a href="#"
+                      >深入理解JavaScript异步编程：从回调到Async/Await</a
+                    >
+                  </h2>
+                  <p class="text-secondary mt-3 line-clamp-3">
+                    JavaScript异步编程是前端开发中的重要概念，本文将从基础的回调函数开始，逐步介绍Promise、Generator以及Async/Await语法，帮助你全面掌握JavaScript异步编程的各种模式和最佳实践。
+                  </p>
+                  <div class="flex justify-between items-center mt-4">
+                    <div class="flex items-center">
+                      <img
+                        src="https://picsum.photos/id/64/40/40"
+                        alt="作者头像"
+                        class="w-8 h-8 rounded-full mr-2"
+                      />
+                      <span class="text-sm font-medium">博主昵称</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-secondary">
+                      <span class="text-sm"
+                        ><i class="fa fa-eye mr-1"></i>1.2k</span
+                      >
+                      <span class="text-sm"
+                        ><i class="fa fa-comment-o mr-1"></i>45</span
+                      >
+                      <span class="text-sm"
+                        ><i class="fa fa-heart-o mr-1"></i>128</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 文章2 -->
+            <article
+              class="bg-white rounded-xl shadow-soft overflow-hidden card-hover"
+            >
+              <div class="md:flex">
+                <div class="md:w-1/3">
+                  <img
+                    src="https://picsum.photos/id/180/600/400"
+                    alt="文章缩略图"
+                    class="w-full h-48 md:h-full object-cover"
+                  />
+                </div>
+                <div class="p-6 md:w-2/3">
+                  <div class="flex items-center text-sm text-secondary mb-2">
+                    <span class="mr-4"
+                      ><i class="fa fa-folder-o mr-1"></i>开发工具</span
+                    >
+                    <span><i class="fa fa-calendar-o mr-1"></i>2024-01-10</span>
+                  </div>
+                  <h2
+                    class="text-xl font-bold text-dark hover:text-primary transition-colors"
+                  >
+                    <a href="#">Git高级技巧：提升你的版本控制效率</a>
+                  </h2>
+                  <p class="text-secondary mt-3 line-clamp-3">
+                    Git作为最流行的版本控制系统，掌握其高级技巧能显著提升开发效率。本文将介绍Git分支管理策略、交互式rebase、stash操作、子模块使用等高级特性，帮助你成为Git高手。
+                  </p>
+                  <div class="flex justify-between items-center mt-4">
+                    <div class="flex items-center">
+                      <img
+                        src="https://picsum.photos/id/64/40/40"
+                        alt="作者头像"
+                        class="w-8 h-8 rounded-full mr-2"
+                      />
+                      <span class="text-sm font-medium">博主昵称</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-secondary">
+                      <span class="text-sm"
+                        ><i class="fa fa-eye mr-1"></i>986</span
+                      >
+                      <span class="text-sm"
+                        ><i class="fa fa-comment-o mr-1"></i>32</span
+                      >
+                      <span class="text-sm"
+                        ><i class="fa fa-heart-o mr-1"></i>95</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 文章3 -->
+            <article
+              class="bg-white rounded-xl shadow-soft overflow-hidden card-hover"
+            >
+              <div class="md:flex">
+                <div class="md:w-1/3">
+                  <img
+                    src="https://picsum.photos/id/160/600/400"
+                    alt="文章缩略图"
+                    class="w-full h-48 md:h-full object-cover"
+                  />
+                </div>
+                <div class="p-6 md:w-2/3">
+                  <div class="flex items-center text-sm text-secondary mb-2">
+                    <span class="mr-4"
+                      ><i class="fa fa-folder-o mr-1"></i>后端开发</span
+                    >
+                    <span><i class="fa fa-calendar-o mr-1"></i>2024-01-05</span>
+                  </div>
+                  <h2
+                    class="text-xl font-bold text-dark hover:text-primary transition-colors"
+                  >
+                    <a href="#">Node.js性能优化实战：从理论到实践</a>
+                  </h2>
+                  <p class="text-secondary mt-3 line-clamp-3">
+                    Node.js凭借其非阻塞I/O模型在服务端开发中广受欢迎，但要充分发挥其性能优势需要掌握一定的优化技巧。本文将从内存管理、事件循环、异步操作优化等方面，介绍Node.js性能调优的实用策略。
+                  </p>
+                  <div class="flex justify-between items-center mt-4">
+                    <div class="flex items-center">
+                      <img
+                        src="https://picsum.photos/id/64/40/40"
+                        alt="作者头像"
+                        class="w-8 h-8 rounded-full mr-2"
+                      />
+                      <span class="text-sm font-medium">博主昵称</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-secondary">
+                      <span class="text-sm"
+                        ><i class="fa fa-eye mr-1"></i>1.5k</span
+                      >
+                      <span class="text-sm"
+                        ><i class="fa fa-comment-o mr-1"></i>56</span
+                      >
+                      <span class="text-sm"
+                        ><i class="fa fa-heart-o mr-1"></i>178</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- 分页 -->
+          <div class="flex justify-center mt-8">
+            <nav class="inline-flex rounded-md shadow-sm" aria-label="分页">
+              <a
+                href="#"
+                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50"
+              >
+                <i class="fa fa-angle-left"></i>
+              </a>
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-primary text-sm font-medium text-white"
+                >1</a
+              >
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50"
+                >2</a
+              >
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50"
+                >3</a
+              >
+              <span
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary"
+                >...</span
+              >
+              <a
+                href="#"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50"
+                >10</a
+              >
+              <a
+                href="#"
+                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-secondary hover:bg-gray-50"
+              >
+                <i class="fa fa-angle-right"></i>
+              </a>
+            </nav>
+          </div>
+
+          <!-- 关于博主 -->
+          <section
+            id="about"
+            class="bg-white rounded-xl shadow-soft p-6 card-hover"
+          >
+            <h3 class="text-xl font-bold text-dark mb-4">关于博主</h3>
+            <div
+              class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0"
+            >
+              <img
+                src="https://picsum.photos/id/64/120/120"
+                alt="博主照片"
+                class="w-24 h-24 rounded-full border-2 border-gray-100"
+              />
+              <div class="md:ml-6 flex-grow">
+                <p class="text-secondary">
+                  你好，我是一名热爱技术的开发者，专注于前端和全栈开发。这个博客是我记录学习心得、分享技术经验的地方。我相信知识的分享能够让技术社区更加繁荣，也希望通过这个平台认识更多志同道合的朋友。
+                </p>
+                <div
+                  class="flex justify-center md:justify-start space-x-4 mt-4"
+                >
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-github text-xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-twitter text-xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-linkedin text-xl"></i>
+                  </a>
+                  <a
+                    href="#"
+                    class="text-secondary hover:text-primary transition-colors"
+                  >
+                    <i class="fa fa-envelope text-xl"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 扩展接口占位区域 -->
+          <div
+            class="bg-gradient-to-r from-primary/5 to-accent/5 rounded-xl p-6 border border-dashed border-primary/30"
+          >
+            <h3 class="text-lg font-semibold text-dark flex items-center">
+              <i class="fa fa-puzzle-piece text-primary mr-2"></i>
+              博客扩展接口区域
+            </h3>
+            <p class="text-secondary mt-2">
+              此区域预留用于未来功能扩展，如评论系统、推荐文章、相关阅读等模块。
+            </p>
+
+            <!-- 评论系统接口 -->
+            <div class="mt-4 bg-white/80 p-4 rounded-lg border border-gray-100">
+              <h4 class="font-medium text-dark flex items-center text-sm">
+                <i class="fa fa-comment text-primary mr-2"></i>
+                评论系统接口
+              </h4>
+              <p class="text-xs text-secondary mt-1">
+                可在此处集成Disqus、Gitalk、Valine等第三方评论系统或自定义评论功能
+              </p>
+            </div>
+
+            <!-- 推荐系统接口 -->
+            <div class="mt-3 bg-white/80 p-4 rounded-lg border border-gray-100">
+              <h4 class="font-medium text-dark flex items-center text-sm">
+                <i class="fa fa-thumbs-up text-primary mr-2"></i>
+                推荐系统接口
+              </h4>
+              <p class="text-xs text-secondary mt-1">
+                可集成基于用户兴趣的智能推荐算法，展示个性化内容
+              </p>
+            </div>
+
+            <!-- 统计分析接口 -->
+            <div class="mt-3 bg-white/80 p-4 rounded-lg border border-gray-100">
+              <h4 class="font-medium text-dark flex items-center text-sm">
+                <i class="fa fa-bar-chart text-primary mr-2"></i>
+                统计分析接口
+              </h4>
+              <p class="text-xs text-secondary mt-1">
+                可集成网站访问统计、文章阅读量分析等功能模块
+              </p>
+            </div>
           </div>
         </div>
       </div>
-      
-      <!-- 版权信息 -->
-      <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm">
-        <p>&copy; 2024 我的个人博客. All rights reserved.</p>
-        <p class="mt-1">使用 <i class="fa fa-heart text-primary"></i> 和 Tailwind CSS 构建</p>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-12 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- 博客信息 -->
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <i class="fa fa-book text-primary text-2xl"></i>
+              <h3 class="text-xl font-bold">我的博客</h3>
+            </div>
+            <p class="text-gray-400 mb-4">
+              记录技术成长，分享开发经验，探索编程世界的精彩。
+            </p>
+            <div class="flex space-x-4">
+              <a
+                href="#"
+                class="text-gray-400 hover:text-primary transition-colors"
+              >
+                <i class="fa fa-github text-xl"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-primary transition-colors"
+              >
+                <i class="fa fa-twitter text-xl"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-primary transition-colors"
+              >
+                <i class="fa fa-linkedin text-xl"></i>
+              </a>
+              <a
+                href="#"
+                class="text-gray-400 hover:text-primary transition-colors"
+              >
+                <i class="fa fa-weibo text-xl"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- 快速链接 -->
+          <div>
+            <h3 class="text-lg font-bold mb-4">快速链接</h3>
+            <ul class="space-y-2">
+              <li>
+                <a
+                  href="blog.html"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >首页</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#articles"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >文章列表</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#categories"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >文章分类</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#tags"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >标签云</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  class="text-gray-400 hover:text-white transition-colors"
+                  >关于博主</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <!-- 联系信息 -->
+          <div>
+            <h3 class="text-lg font-bold mb-4">联系我</h3>
+            <ul class="space-y-2">
+              <li class="flex items-start">
+                <i class="fa fa-envelope text-primary mt-1 mr-3"></i>
+                <span class="text-gray-400">contact@example.com</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-map-marker text-primary mt-1 mr-3"></i>
+                <span class="text-gray-400">北京市海淀区</span>
+              </li>
+            </ul>
+            <div class="mt-6">
+              <h4 class="text-sm font-semibold text-gray-300 mb-2">
+                订阅博客更新
+              </h4>
+              <div class="flex">
+                <input
+                  type="email"
+                  placeholder="输入您的邮箱"
+                  class="px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg text-white focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary flex-grow"
+                />
+                <button
+                  class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-r-lg transition-colors"
+                >
+                  订阅
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 版权信息 -->
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400 text-sm"
+        >
+          <p>&copy; 2024 我的个人博客. All rights reserved.</p>
+          <p class="mt-1">
+            使用 <i class="fa fa-heart text-primary"></i> 和 Tailwind CSS 构建
+          </p>
+        </div>
       </div>
-    </div>
-  </footer>
+    </footer>
 
-  <!-- 返回顶部按钮 -->
-  <button id="backToTop" class="fixed bottom-6 right-6 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary/90">
-    <i class="fa fa-chevron-up"></i>
-  </button>
+    <!-- 返回顶部按钮 -->
+    <button
+      id="backToTop"
+      class="fixed bottom-6 right-6 bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary/90"
+    >
+      <i class="fa fa-chevron-up"></i>
+    </button>
 
-  <!-- JavaScript -->
-  <script>
-    // 移动端菜单切换
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      // 切换图标
-      const icon = mobileMenuBtn.querySelector('i');
-      if (mobileMenu.classList.contains('hidden')) {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      } else {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-      }
-    });
-    
-    // 返回顶部按钮
-    const backToTopBtn = document.getElementById('backToTop');
-    
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 300) {
-        backToTopBtn.classList.remove('opacity-0', 'invisible');
-        backToTopBtn.classList.add('opacity-100', 'visible');
-      } else {
-        backToTopBtn.classList.remove('opacity-100', 'visible');
-        backToTopBtn.classList.add('opacity-0', 'invisible');
-      }
-    });
-    
-    backToTopBtn.addEventListener('click', () => {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    });
-    
-    // 平滑滚动
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          // 关闭移动菜单（如果打开）
-          if (!mobileMenu.classList.contains('hidden')) {
-            mobileMenu.classList.add('hidden');
-            const icon = mobileMenuBtn.querySelector('i');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-          }
-          
-          // 平滑滚动到目标位置
-          targetElement.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-          });
+    <!-- JavaScript -->
+    <script>
+      // 移动端菜单切换
+      const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+      const mobileMenu = document.getElementById("mobileMenu");
+
+      mobileMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.toggle("hidden");
+        // 切换图标
+        const icon = mobileMenuBtn.querySelector("i");
+        if (mobileMenu.classList.contains("hidden")) {
+          icon.classList.remove("fa-times");
+          icon.classList.add("fa-bars");
+        } else {
+          icon.classList.remove("fa-bars");
+          icon.classList.add("fa-times");
         }
       });
-    });
-    
-    // 文章卡片动画效果
-    const articleCards = document.querySelectorAll('article');
-    articleCards.forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        card.classList.add('shadow-md');
+
+      // 返回顶部按钮
+      const backToTopBtn = document.getElementById("backToTop");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.remove("opacity-0", "invisible");
+          backToTopBtn.classList.add("opacity-100", "visible");
+        } else {
+          backToTopBtn.classList.remove("opacity-100", "visible");
+          backToTopBtn.classList.add("opacity-0", "invisible");
+        }
       });
-      
-      card.addEventListener('mouseleave', () => {
-        card.classList.remove('shadow-md');
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
       });
-    });
-    
-    // 预留的扩展接口函数 - 可在未来实现具体功能
-    window.blogExtensions = {
-      // 评论系统接口
-      initCommentSystem: function(options) {
-        console.log('初始化评论系统', options);
-        // 未来可在此实现评论系统集成
-      },
-      
-      // 推荐系统接口
-      initRecommendationSystem: function(options) {
-        console.log('初始化推荐系统', options);
-        // 未来可在此实现文章推荐功能
-      },
-      
-      // 统计分析接口
-      initAnalytics: function(options) {
-        console.log('初始化统计分析', options);
-        // 未来可在此实现访问统计功能
-      },
-      
-      // 搜索功能接口
-      initSearch: function(options) {
-        console.log('初始化搜索功能', options);
-        // 未来可在此实现站内搜索功能
-      }
-    };
-    
-    // 页面加载完成后执行
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('博客页面加载完成');
-      
-      // 这里可以调用预留的扩展接口
-      // 例如: window.blogExtensions.initCommentSystem({...});
-    });
-  </script>
-</body>
+
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const targetId = this.getAttribute("href");
+          if (targetId === "#") return;
+
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            // 关闭移动菜单（如果打开）
+            if (!mobileMenu.classList.contains("hidden")) {
+              mobileMenu.classList.add("hidden");
+              const icon = mobileMenuBtn.querySelector("i");
+              icon.classList.remove("fa-times");
+              icon.classList.add("fa-bars");
+            }
+
+            // 平滑滚动到目标位置
+            targetElement.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }
+        });
+      });
+
+      // 文章卡片动画效果
+      const articleCards = document.querySelectorAll("article");
+      articleCards.forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          card.classList.add("shadow-md");
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.classList.remove("shadow-md");
+        });
+      });
+
+      // 预留的扩展接口函数 - 可在未来实现具体功能
+      window.blogExtensions = {
+        // 评论系统接口
+        initCommentSystem: function (options) {
+          console.log("初始化评论系统", options);
+          // 未来可在此实现评论系统集成
+        },
+
+        // 推荐系统接口
+        initRecommendationSystem: function (options) {
+          console.log("初始化推荐系统", options);
+          // 未来可在此实现文章推荐功能
+        },
+
+        // 统计分析接口
+        initAnalytics: function (options) {
+          console.log("初始化统计分析", options);
+          // 未来可在此实现访问统计功能
+        },
+
+        // 搜索功能接口
+        initSearch: function (options) {
+          console.log("初始化搜索功能", options);
+          // 未来可在此实现站内搜索功能
+        },
+      };
+
+      // 页面加载完成后执行
+      document.addEventListener("DOMContentLoaded", function () {
+        console.log("博客页面加载完成");
+
+        // 这里可以调用预留的扩展接口
+        // 例如: window.blogExtensions.initCommentSystem({...});
+      });
+    </script>
+  </body>
 </html>
